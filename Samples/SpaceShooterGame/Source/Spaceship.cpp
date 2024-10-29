@@ -58,8 +58,9 @@ void Spaceship::onUpdate(f32 deltaTime)
 
 	f32 forward = 0.0f;
 	f32 rightward = 0.0f;
+	f32 upward = 0.0f;
 
-	f32 speed = 1.0f;
+	f32 speed = 3.0f;
 	bool turbo = false;
 
 	//Spaceship controls
@@ -79,9 +80,21 @@ void Spaceship::onUpdate(f32 deltaTime)
 	{
 		rightward = 1.0f;
 	}
+	if (input->isKeyDown(CXKey::Q))
+	{
+		upward = -1.0f;
+	}
+	if (input->isKeyDown(CXKey::Space))
+	{
+		upward = 1.0f;
+	}
+	if (input->isKeyDown(CXKey::E))
+	{
+		upward = 1.0f;
+	}
 	if (input->isKeyDown(CXKey::Shift))
 	{
-		speed = 3.0f;
+		speed = 7.0f;
 		turbo = true;
 	}
 
@@ -140,7 +153,7 @@ void Spaceship::onUpdate(f32 deltaTime)
 	auto ydir = w.getUpDirection();
 	
 
-	auto pos = m_position + zdir * forward * deltaTime * 100.0f * speed;
+	auto pos = m_position + zdir * forward * deltaTime * 100.0f * speed + xdir * rightward * deltaTime * 100.0f * speed + ydir * upward * deltaTime * 100.0f * speed;
 	setPosition(pos);
 
 

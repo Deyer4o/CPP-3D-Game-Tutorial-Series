@@ -26,8 +26,9 @@ SOFTWARE.*/
 #include <iostream>
 #include <Windows.h>
 
-int main()
+int main(int argc, char** argv)
 {
+	
 	try
 	{  
 		SpaceShooterGame game;

@@ -24,6 +24,7 @@ SOFTWARE.*/
 
 #include "SpaceShooterGame.h"
 #include "Spaceship.h"
+#include "Deyan/DeyanPathfinder.h"
 #include <time.h>
 
 
@@ -40,7 +41,7 @@ void SpaceShooterGame::onCreate()
 	setTitle(L"SpaceShooterGame");
 
 	//Adding SkyBox
-	{
+	/*{
 		auto tex = createTexture(L"Assets/Textures/stars_map.jpg");
 		auto mesh = createMesh(L"Assets/Meshes/sphere.obj");
 		auto mat = createMaterial(L"Assets/Shaders/skybox.hlsl");
@@ -51,7 +52,7 @@ void SpaceShooterGame::onCreate()
 		entity->setMesh(mesh);
 		entity->addMaterial(mat);
 		entity->setScale(CXVec3(20000, 20000, 20000));
-	}
+	}*/
 
 	//Adding DLightEntity
 	{
@@ -67,27 +68,105 @@ void SpaceShooterGame::onCreate()
 		entity->setRotation(CXVec3(0.707f, 0.707f, 0));
 	}
 
-	//Adding Asteroids
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+	DeyanPathfinder pathfinder(50);
+
+
+
+
+
+
+
+
+	//Adding Pathfinding Array 
 	{
 		srand((unsigned int)time(NULL));
 
 		auto tex = createTexture(L"Assets/Textures/asteroid.jpg");
-		auto mesh = createMesh(L"Assets/Meshes/asteroid.obj");
+		auto mesh = createMesh(L"Assets/Meshes/sphere.obj");
 		auto mat = createMaterial(L"Assets/Shaders/base.hlsl");
 		mat->addTexture(tex);
-
-		for (unsigned int i = 0; i < 200; i++)
+		for (unsigned int y = 0; y < 12; y++)
+		for (unsigned int x = 0; x < 12; x++)
 		{
-			auto entity = createEntity<CXMeshEntity>();
+			
+			/*auto entity = createEntity<CXMeshEntity>();
 			entity->setMesh(mesh);
 			entity->addMaterial(mat);
 			
 			entity->setPosition(CXVec3((rand() % 4000) + (-2000.0f), (rand() % 4000) + (-2000.0f), (rand() % 4000) + (-2000.0f)));
 			entity->setRotation(CXVec3((rand() % 628) / 100.0f, (rand() % 628) / 100.0f, (rand() % 628) / 100.0f));
 			float scale = rand() % 20 + (1.0f);
-			entity->setScale(CXVec3(scale, scale, scale));
+			entity->setScale(CXVec3(scale, scale, scale));*/
+
+			auto test_entity = createEntity<CXMeshEntity>();
+			test_entity->setMesh(mesh);
+			test_entity->addMaterial(mat);
+			
+			test_entity->setPosition(CXVec3(x*100,y*100,-2000.0f));
+			test_entity->setRotation(CXVec3(1.0f,1.0f,1.0f));
+			float scale = 10.0f;
+			test_entity->setScale(CXVec3(scale, scale, scale)); 
+			
 		}
 	}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 	//Adding Spaceship
 	{
 		auto entity = createEntity<Spaceship>();
