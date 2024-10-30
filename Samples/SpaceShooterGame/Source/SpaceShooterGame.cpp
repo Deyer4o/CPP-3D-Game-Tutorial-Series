@@ -110,33 +110,43 @@ void SpaceShooterGame::onCreate()
 
 	//Custom approach:
 
-	Node nodeArray[10];
-	Node_ID = 0;
+	std::vector<Node> nodeArray;
+	//Node_ID = 0;
 
-	nodeArray[0] = Node(0.0f, 0.0f, 400.0f);
-	nodeArray[1] = Node(0.0f, 20.0f, 400.0f);
-	nodeArray[2] = Node(20.0f, 30.0f, 400.0f);
-	nodeArray[3] = Node(60.0f, 0.0f, 400.0f);
-	nodeArray[4] = Node(30.0f, 100.0f, 400.0f);
-	nodeArray[5] = Node(1000.0f, 0.0f, 400.0f);
-	nodeArray[6] = Node(100.0f, 40.0f, 400.0f);
-	nodeArray[7] = Node(100.0f, 50.0f, 400.0f);
-	nodeArray[8] = Node(40.0f, 20.0f, 400.0f);
-	nodeArray[9] = Node(60.0f, 80.0f, 400.0f);
+	nodeArray.push_back(Node(0.0f, 0.0f, 400.0f));
+	nodeArray.push_back(Node(0.0f, 20.0f, 400.0f));
+	nodeArray.push_back(Node(20.0f, 30.0f, 400.0f));
+	nodeArray.push_back(Node(60.0f, 0.0f, 400.0f));
+	nodeArray.push_back(Node(30.0f, 100.0f, 400.0f));
+	nodeArray.push_back(Node(1000.0f, 0.0f, 400.0f));
+	nodeArray.push_back(Node(100.0f, 40.0f, 400.0f));
+	nodeArray.push_back(Node(100.0f, 50.0f, 400.0f));
+	nodeArray.push_back(Node(40.0f, 20.0f, 400.0f));
+	nodeArray.push_back(Node(60.0f, 80.0f, 400.0f));
 	
-	nodeArray[3].addNeighbours({ nodeArray[4] , nodeArray[5] });
-	nodeArray[4].addNeighbours({ nodeArray[3] , nodeArray[5] });
-	//MakeNeighbours({ nodeArray[3] , nodeArray[5] , nodeArray[6] });
+	//nodeArray[3].addNeighbours({ nodeArray[4] , nodeArray[5] });
+	//nodeArray[3].addNeighbours({ nodeArray[4] , nodeArray[5] });
+
+	nodeArray[3].addNeighbour(&nodeArray[4]);
+	nodeArray[3].addNeighbour(&nodeArray[5]);
+	nodeArray[3].addNeighbour(&nodeArray[3]);
+	nodeArray[3].addNeighbour(&nodeArray[4]);
+	//nodeArray[4].ID = 69;
+	
+	//nodeArray[5].addNeighbours({ nodeArray[3] , nodeArray[4] });
+	//Node MNArray[3] = { nodeArray[3] , nodeArray[4] , nodeArray[5] };
+	//MakeNeighbours({ nodeArray[3] , nodeArray[4] , nodeArray[5] });
 
 
 	//print("test");
 	nodeArray[3].printNeighbours(); // change param here to test for cross neighbours
-	nodeArray[4].printNeighbours();
-	nodeArray[5].printNeighbours();
+	//print(nodeArray[4]);
+	//nodeArray[4].printNeighbours();
+	//nodeArray[5].printNeighbours();
 
 	for (int i = 0; i < 10; i++)
 	{
-		print(nodeArray[i]);
+		//print(nodeArray[i]);
 	}
 		//pathfinder.addNode();
 	

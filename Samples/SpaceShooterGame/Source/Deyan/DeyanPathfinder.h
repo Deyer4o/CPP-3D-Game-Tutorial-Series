@@ -7,7 +7,7 @@
 #include <CX3D/All.h>
 
 constexpr long long int INF = 999999999; //used instead of infinity - needs to be bigger than the biggest unit for the algorithm to work
-int Node_ID = 0; //this makes all Nodes unique - keep in mind, every time a constructor is called this increments by 1
+int Node_ID = 0; //this makes all Nodes unique - keep in mind, every time a Node constructor is called this increments by 1
 
 
 //Nodes are the intersection points for the pathfinding algorithm
@@ -20,9 +20,7 @@ public:
 	{
 		location = CXVec3(0.0f, 0.0f, 0.0f);
 		value = INF;
-		ID = Node_ID;
-		Node_ID++;
-
+		AssignId();
 	};
 
 	//Constructor with location <CXVec3>
@@ -30,9 +28,7 @@ public:
 	{
 		location = _location;
 		value = INF;
-		ID = Node_ID;
-		Node_ID++;
-
+		AssignId();
 	};
 
 	//Constructor with location <CXVec3> and value <long long>
@@ -40,9 +36,7 @@ public:
 	{
 		location = _location;
 		value = _value;
-		ID = Node_ID;
-		Node_ID++;
-
+		AssignId();
 	};
 
 	//Constructor with location <float> (x, y, z)
@@ -50,9 +44,7 @@ public:
 	{
 		location = CXVec3(_x,_y,_z);
 		value = INF;
-		ID = Node_ID;
-		Node_ID++;
-
+		AssignId();
 	};
 
 	//Default Destructor
@@ -71,58 +63,106 @@ public:
 	void printNeighbours()
 	{
 		//print();
-		std::cout << "----------Node " << this->ID << " Neighbours list : ----------" << std::endl;
-		for (Node itNode : NodeNeighbours) 
+		std::cout << "----------Node [" << this->ID << "] Neighbours list : ----------" << std::endl;
+		for (Node* itNode : NodeNeighbours) 
 		{
-			itNode.print();
+			itNode->print();
 		}
 		std::cout << "---------------------------------------------" << std::endl;
 	};
 
 	//If _node is not a neighbour, add it to the neighbours list (NodeNeighbours) 
-	void addNeighbour(Node &_node) 
+	void addNeighbour(Node *_node) 
 	{
-		short test_hits = 0;
-		for (Node itNode : NodeNeighbours) //iterate through array
+		//this needs to do 3 things
+		//- check if it's trying to add itself
+		//- if not then check if neighbour is already on the list
+		//- if not add it to the list
+		
+		if (ID != _node->ID) //check if it's trying to add itself
 		{
-			if (itNode.ID == _node.ID) //check for same ID
+			if (NodeNeighbours.size() == 0)
 			{
-				test_hits++; //if test hits, iterate the temporary int and break the "for each" loop
-				break;
+				//not on the list since list is empty, add to the list
+				NodeNeighbours.push_back(_node);
 			}
-		};
-		if (test_hits == 0) //if test doesn't hit
-		{
-			NodeNeighbours.push_back(_node); //add the node to neighbour vector array
-			_node.addNeighbours({ *this }); //performs the same action but from the opposite Node /////////////////////THIS DOESN"T WORKKKKK????
-		}
-		else {
-			//std::cout << "addNeighbour() ERROR - element already in the array!" << std::endl; //error message
+			else
+			{
+				//list is not empty, so go through every Node on the lsit and if there is no match, add to the list
+				short matches = 0;
+				for (Node* itNode : NodeNeighbours)
+				{
+					if (_node->ID == itNode->ID)
+					{
+						matches++;
+					}
+				}
+				if (matches == 0) //there's no match
+				{
+					NodeNeighbours.push_back(_node);
+				}
+			}
 		}
 
+
+		/*
+		if (NodeNeighbours.size() > 0) 
+		{
+			for (Node itNode : NodeNeighbours) //iterate through array
+			{
+				if (_node.ID == itNode.ID)
+				{
+					test_hits++;
+				}
+			}
+			if (test_hits == 0)
+			{
+				NodeNeighbours.push_back(_node);
+			}
+		}
+		else 
+		{
+			
+		}
+		*/
+		//std::cout << "Size neighbours array of node[" << ID << "] is " << NodeNeighbours.size() << std::endl;
+		//printNeighbours();
 	};
 
 	//Performs addNeighbour() on a vector Array of Nodes
-	void addNeighbours(std::vector<Node> _nodes)
+	//using r = std::reference_wrapper<Node*>;
+	void addNeighbours(std::vector<Node*> _nodes) //DOESN't WORK CURRENTLY WIP!!!!
 	{
-		for (Node& currentNode : _nodes)
+		for (Node* currentNode : _nodes)
 		{
 			addNeighbour(currentNode);
 		};
+
 	};
 
+
+
 	//Unique Node ID (0,1,2...)
-	int ID;
+	int ID = -1;
 
 	//Node 3D location (for 2D, just ignore Z)
 	CXVec3 location;
 	//value of
 	long long int value;
-	std::vector<Node> NodeNeighbours;
+	std::vector<Node*> NodeNeighbours;
 
 private:
 	long long int valueToGoal = INF; //used for A* pathfinder addition on top of Dijkstra
 	bool FULLY_CHECKED = false; //used for the pathfinding algorithm - flags if all neighbours have already been checked
+
+	void AssignId() 
+	{
+		if (ID == -1)
+		{
+			ID = Node_ID;
+			Node_ID++;
+		}
+	}
 };
 //end of Node class
 
@@ -181,11 +221,11 @@ private:
 
 //Debug and other helping fuctions
 
-void MakeNeighbours(std::vector<Node> _nodes) // THIS DOESN"T CURRENTLY WORK!!!
+void MakeNeighbours(std::vector<Node*> _nodes) // THIS DOESN"T CURRENTLY WORK!!!
 {
-	for (Node itNode : _nodes)
+	for (Node* itNode : _nodes)
 	{
-		itNode.addNeighbours(_nodes);
+		itNode->addNeighbours(_nodes);
 	};
 };
 
