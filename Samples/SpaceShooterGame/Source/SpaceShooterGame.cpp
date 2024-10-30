@@ -28,6 +28,7 @@ SOFTWARE.*/
 #include <time.h>
 
 
+
 SpaceShooterGame::SpaceShooterGame()
 {
 }
@@ -88,19 +89,12 @@ void SpaceShooterGame::onCreate()
 
 
 
+	auto tex = createTexture(L"Assets/Textures/orange.jpg");
+	auto mesh_sphere = createMesh(L"Assets/Meshes/sphere.obj");
+	//auto mesh_cube = createMesh(L"Assets/Meshes/Cube.obj");
+	auto mat = createMaterial(L"Assets/Shaders/base.hlsl");
+	mat->addTexture(tex);
 
-
-
-
-
-
-
-
-
-
-
-
-	DeyanPathfinder pathfinder(50);
 
 
 
@@ -110,42 +104,88 @@ void SpaceShooterGame::onCreate()
 
 
 	//Adding Pathfinding Array 
+	DeyanPathfinder pathfinder;
+	
+
+
+	//Custom approach:
+
+	Node nodeArray[10];
+	Node_ID = 0;
+
+	nodeArray[0] = Node(0.0f, 0.0f, 400.0f);
+	nodeArray[1] = Node(0.0f, 20.0f, 400.0f);
+	nodeArray[2] = Node(20.0f, 30.0f, 400.0f);
+	nodeArray[3] = Node(60.0f, 0.0f, 400.0f);
+	nodeArray[4] = Node(30.0f, 100.0f, 400.0f);
+	nodeArray[5] = Node(1000.0f, 0.0f, 400.0f);
+	nodeArray[6] = Node(100.0f, 40.0f, 400.0f);
+	nodeArray[7] = Node(100.0f, 50.0f, 400.0f);
+	nodeArray[8] = Node(40.0f, 20.0f, 400.0f);
+	nodeArray[9] = Node(60.0f, 80.0f, 400.0f);
+	
+	nodeArray[3].addNeighbours({ nodeArray[4] , nodeArray[5] });
+	nodeArray[4].addNeighbours({ nodeArray[3] , nodeArray[5] });
+	//MakeNeighbours({ nodeArray[3] , nodeArray[5] , nodeArray[6] });
+
+
+	//print("test");
+	nodeArray[3].printNeighbours(); // change param here to test for cross neighbours
+	nodeArray[4].printNeighbours();
+	nodeArray[5].printNeighbours();
+
+	for (int i = 0; i < 10; i++)
 	{
-		srand((unsigned int)time(NULL));
-
-		auto tex = createTexture(L"Assets/Textures/asteroid.jpg");
-		auto mesh = createMesh(L"Assets/Meshes/sphere.obj");
-		auto mat = createMaterial(L"Assets/Shaders/base.hlsl");
-		mat->addTexture(tex);
-		for (unsigned int y = 0; y < 12; y++)
-		for (unsigned int x = 0; x < 12; x++)
-		{
-			
-			/*auto entity = createEntity<CXMeshEntity>();
-			entity->setMesh(mesh);
-			entity->addMaterial(mat);
-			
-			entity->setPosition(CXVec3((rand() % 4000) + (-2000.0f), (rand() % 4000) + (-2000.0f), (rand() % 4000) + (-2000.0f)));
-			entity->setRotation(CXVec3((rand() % 628) / 100.0f, (rand() % 628) / 100.0f, (rand() % 628) / 100.0f));
-			float scale = rand() % 20 + (1.0f);
-			entity->setScale(CXVec3(scale, scale, scale));*/
-
-			auto test_entity = createEntity<CXMeshEntity>();
-			test_entity->setMesh(mesh);
-			test_entity->addMaterial(mat);
-			
-			test_entity->setPosition(CXVec3(x*100,y*100,-2000.0f));
-			test_entity->setRotation(CXVec3(1.0f,1.0f,1.0f));
-			float scale = 10.0f;
-			test_entity->setScale(CXVec3(scale, scale, scale)); 
-			
-		}
+		print(nodeArray[i]);
 	}
+		//pathfinder.addNode();
+	
 
 
 
+	// Array approach:
+
+	//int ArraySize = 5;
+	//CXVec3 ArrayPosition = CXVec3(0.0f, 0.0f, 400.0f);
+	//int NodesDistance = 100;
+	//float ArrayScale = 10.0f;
+	//
+	//{
+	//	srand((unsigned int)time(NULL));
+
+	//	
+	//	for (int y = 0; y < ArraySize; y++)
+	//	for (int x = 0; x < ArraySize; x++)
+	//	for (int z = 0; z < ArraySize; z++)
+	//	{
+	//		
+	//		//auto entity = createEntity<CXMeshEntity>();
+	//		//entity->setMesh(mesh);
+	//		//entity->addMaterial(mat);
+	//		//
+	//		//entity->setPosition(CXVec3((rand() % 4000) + (-2000.0f), (rand() % 4000) + (-2000.0f), (rand() % 4000) + (-2000.0f)));
+	//		//entity->setRotation(CXVec3((rand() % 628) / 100.0f, (rand() % 628) / 100.0f, (rand() % 628) / 100.0f));
+	//		//float scale = rand() % 20 + (1.0f);
+	//		//entity->setScale(CXVec3(scale, scale, scale));
+
+	//		auto test_entity = createEntity<CXMeshEntity>();
+	//		test_entity->setMesh(mesh_sphere);
+	//		test_entity->addMaterial(mat);
+
+	//		Node currentNode(CXVec3(x * NodesDistance + ArrayPosition.x, y * NodesDistance + ArrayPosition.y,z * NodesDistance + ArrayPosition.z),x + ArraySize * y);
+	//		pathfinder.addNode(currentNode);
+
+	//		test_entity->setPosition(currentNode.location);
+	//		test_entity->setRotation(CXVec3(1.0f,1.0f,1.0f));
+	//		
+	//		test_entity->setScale(CXVec3(ArrayScale, ArrayScale, ArrayScale));
+	//		
+	//	}
+	//}
 
 
+
+	pathfinder.print();
 
 
 

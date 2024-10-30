@@ -37,15 +37,15 @@ Spaceship::~Spaceship()
 void Spaceship::onCreate()
 {
 	//Load all the assets
-	auto tex = createTexture(L"Assets/Textures/spaceship.jpg");
-	auto mesh = createMesh(L"Assets/Meshes/spaceship.obj");
-	auto mat = createMaterial(L"Assets/Shaders/base.hlsl");
+	//auto tex = createTexture(L"Assets/Textures/spaceship.jpg");
+	//auto mesh = createMesh(L"Assets/Meshes/spaceship.obj");
+	//auto mat = createMaterial(L"Assets/Shaders/base.hlsl");
 	//Add the texture to material
-	mat->addTexture(tex);
+	//mat->addTexture(tex);
 
 	//Set the mesh and material into the entity
-	setMesh(mesh);
-	addMaterial(mat);
+	//setMesh(mesh);
+	//addMaterial(mat);
 
 	//Create the camera that follows the spaceship
 	m_camera = getGame()->createEntity<CXCameraEntity>();
