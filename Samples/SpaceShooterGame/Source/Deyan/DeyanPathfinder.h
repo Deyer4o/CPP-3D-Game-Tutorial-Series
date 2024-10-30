@@ -4,11 +4,14 @@
 #pragma once
 #include <vector>
 #include <iostream>
-#include <CX3D/All.h>
+#include <CX3D/Math/CXVec3.h>
 
 constexpr long long int INF = 999999999; //used instead of infinity - needs to be bigger than the biggest unit for the algorithm to work
 int Node_ID = 0; //this makes all Nodes unique - keep in mind, every time a Node constructor is called this increments by 1
 
+//////////////////////////////////
+//Pathfinder Nodes functionality//
+//////////////////////////////////
 
 //Nodes are the intersection points for the pathfinding algorithm
 class Node
@@ -104,40 +107,21 @@ public:
 			}
 		}
 
-
-		/*
-		if (NodeNeighbours.size() > 0) 
-		{
-			for (Node itNode : NodeNeighbours) //iterate through array
-			{
-				if (_node.ID == itNode.ID)
-				{
-					test_hits++;
-				}
-			}
-			if (test_hits == 0)
-			{
-				NodeNeighbours.push_back(_node);
-			}
-		}
-		else 
-		{
-			
-		}
-		*/
 		//std::cout << "Size neighbours array of node[" << ID << "] is " << NodeNeighbours.size() << std::endl;
 		//printNeighbours();
 	};
 
-	//Performs addNeighbour() on a vector Array of Nodes
-	//using r = std::reference_wrapper<Node*>;
-	void addNeighbours(std::vector<Node*> _nodes) //DOESN't WORK CURRENTLY WIP!!!!
+	//Performs addNeighbour() on every Node in _nodeArray, including (this)
+	void makeAllNeighbours(std::vector<Node> &_nodeArray, std::vector<int> _array)
 	{
-		for (Node* currentNode : _nodes)
-		{
-			addNeighbour(currentNode);
-		};
 
+		_array.push_back(ID);
+
+		for (int i : _array)
+		for (int j : _array)
+		{
+			_nodeArray[i].addNeighbour(&_nodeArray[j]);
+		}
 	};
 
 
@@ -166,7 +150,9 @@ private:
 };
 //end of Node class
 
-
+/////////////////////////////////
+//Main Pathfinder functionality//
+/////////////////////////////////
 
 //DeyanPathfinder is holding the main functionality of the pathfinder
 class DeyanPathfinder
@@ -218,15 +204,17 @@ private:
 
 
 
+////////////////////////////////////
+//Debug and other helping fuctions//
+////////////////////////////////////
 
-//Debug and other helping fuctions
-
-void MakeNeighbours(std::vector<Node*> _nodes) // THIS DOESN"T CURRENTLY WORK!!!
+void MakeAllNeighbours(std::vector<Node> &_nodeArray, std::vector<int> _array)
 {
-	for (Node* itNode : _nodes)
+	for (int i : _array)
+	for (int j : _array)
 	{
-		itNode->addNeighbours(_nodes);
-	};
+		_nodeArray[i].addNeighbour(&_nodeArray[j]);
+	}
 };
 
 //Debug print to console <const char*>

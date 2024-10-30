@@ -127,19 +127,29 @@ void SpaceShooterGame::onCreate()
 	//nodeArray[3].addNeighbours({ nodeArray[4] , nodeArray[5] });
 	//nodeArray[3].addNeighbours({ nodeArray[4] , nodeArray[5] });
 
-	nodeArray[3].addNeighbour(&nodeArray[4]);
-	nodeArray[3].addNeighbour(&nodeArray[5]);
-	nodeArray[3].addNeighbour(&nodeArray[3]);
-	nodeArray[3].addNeighbour(&nodeArray[4]);
+	//nodeArray[3].addNeighbour(&nodeArray[4]);
+	//nodeArray[3].addNeighbour(&nodeArray[5]);
+	//nodeArray[3].addNeighbour(&nodeArray[3]);
+	//nodeArray[3].addNeighbour(&nodeArray[4]);
 	//nodeArray[4].ID = 69;
 	
-	//nodeArray[5].addNeighbours({ nodeArray[3] , nodeArray[4] });
+	//nodeArray[3].addNeighbours({ &nodeArray[3] , &nodeArray[4] });
 	//Node MNArray[3] = { nodeArray[3] , nodeArray[4] , nodeArray[5] };
 	//MakeNeighbours({ nodeArray[3] , nodeArray[4] , nodeArray[5] });
 
+	//std::vector<Node>* nodeArrayPointer = &nodeArray;
+	//nodeArray[3].addNeighbours(nodeArrayPointer, { 3, 4, 5 });
 
 	//print("test");
-	nodeArray[3].printNeighbours(); // change param here to test for cross neighbours
+	//MakeNeighbours(nodeArray, { 3, 4, 5, 8 });
+	
+	nodeArray[3].makeAllNeighbours(nodeArray, { 4, 5, 8 , 5, 4});
+
+	nodeArray[3].ID = 33;
+	nodeArray[5].ID = 555;// change param here to test for cross neighbours
+
+	nodeArray[3].printNeighbours(); 
+	nodeArray[5].printNeighbours();
 	//print(nodeArray[4]);
 	//nodeArray[4].printNeighbours();
 	//nodeArray[5].printNeighbours();
