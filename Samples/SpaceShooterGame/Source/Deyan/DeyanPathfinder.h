@@ -4,53 +4,57 @@
 #pragma once
 #include <vector>
 #include <iostream>
-#include <CX3D/Math/CXVec3.h>
+#include <CX3D/Math/CXVec3.h> //this can be swapped for any other simple Vec3 math lib
+#define Vec3 CXVec3
 
-constexpr long long int INF = 999999999; //used instead of infinity - needs to be bigger than the biggest unit for the algorithm to work
-int Node_ID = 0; //this makes all Nodes unique - keep in mind, every time a Node constructor is called this increments by 1
 
 //////////////////////////////////
 //Pathfinder Nodes functionality//
 //////////////////////////////////
+
+constexpr long long int INF = 999999999; //used instead of infinity - needs to be bigger than the biggest unit for the algorithm to work
+int Node_ID = 0; //this makes all Nodes unique - keep in mind, every time a Node constructor is called this increments by 1
+
+
 
 //Nodes are the intersection points for the pathfinding algorithm
 class Node
 {
 public:
 
-	//Default Constructor
+	//Default Node Constructor
 	Node() 
 	{
-		location = CXVec3(0.0f, 0.0f, 0.0f);
+		location = Vec3(0.0f, 0.0f, 0.0f);
 		value = INF;
 		AssignId();
 	};
 
-	//Constructor with location <CXVec3>
-	Node(CXVec3 _location)
+	//Node constructor with location <Vec3>
+	Node(Vec3 _location)
 	{
 		location = _location;
 		value = INF;
 		AssignId();
 	};
 
-	//Constructor with location <CXVec3> and value <long long>
-	Node(CXVec3 _location, long long int _value)
+	//Node constructor with location <Vec3> and value <long long>
+	Node(Vec3 _location, long long int _value)
 	{
 		location = _location;
 		value = _value;
 		AssignId();
 	};
 
-	//Constructor with location <float> (x, y, z)
+	//Node constructor with location <float> (x, y, z)
 	Node(float _x, float _y, float _z)
 	{
-		location = CXVec3(_x,_y,_z);
+		location = Vec3(_x,_y,_z);
 		value = INF;
 		AssignId();
 	};
 
-	//Default Destructor
+	//Default Node Destructor
 	~Node() 
 	{
 		
@@ -111,7 +115,16 @@ public:
 		//printNeighbours();
 	};
 
-	//Performs addNeighbour() on every Node in _nodeArray, including (this)
+	//Performs addNeighbour() on this Node for every _nodeArray[_indexArray] (also adds this Node as a neighbour to them)
+	void addMultipleNeighbours(std::vector<Node>& _nodeArray, std::vector<int> _indexArray)
+	{
+		for (int i : _indexArray) {
+			this->addNeighbour(&_nodeArray[i]);
+			_nodeArray[i].addNeighbour(this);
+		}
+	};
+
+	//Performs addNeighbour() on every Node in _nodeArray for every node in _nodeArray, including (this)
 	void makeAllNeighbours(std::vector<Node> &_nodeArray, std::vector<int> _array)
 	{
 
@@ -130,7 +143,7 @@ public:
 	int ID = -1;
 
 	//Node 3D location (for 2D, just ignore Z)
-	CXVec3 location;
+	Vec3 location;
 	//value of
 	long long int value;
 	std::vector<Node*> NodeNeighbours;
@@ -150,35 +163,50 @@ private:
 };
 //end of Node class
 
+void MakeAllNeighbours(std::vector<Node>& _nodeArray, std::vector<int> _array)
+{
+	for (int i : _array)
+		for (int j : _array)
+		{
+			_nodeArray[i].addNeighbour(&_nodeArray[j]);
+		}
+};
+
 /////////////////////////////////
 //Main Pathfinder functionality//
 /////////////////////////////////
 
 //DeyanPathfinder is holding the main functionality of the pathfinder
-class DeyanPathfinder
+class DPathfinder
 {
 public:
-	DeyanPathfinder()
+
+	//Default DPathfinder constructor
+	DPathfinder()
 	{
 		
 	};
 
-	DeyanPathfinder(const int Size)
+	//DPathfinder constructor with default NodeArray of size _size
+	DPathfinder(const int _size)
 	{
-		for (int i = 0; i < Size; i++)
+		for (int i = 0; i < _size; i++)
 		{
 			Node CurrentNode;
 			NodesArray.push_back(CurrentNode);
 		}
 	};
 
-	~DeyanPathfinder()
+	//Default DPathfinder destructor
+	~DPathfinder()
 	{
 
 	};
 
+	//Prints NodesArray to console
 	void print() 
 	{
+		std::cout << "------Printing Pathfinder NodesArray------" << std::endl;
 		if (NodesArray.size() > 0)
 			for (Node member : NodesArray)
 			{
@@ -190,12 +218,21 @@ public:
 		};
 	}
 
+	//Adds _node to NodesArray
 	void addNode(Node& _node)
 	{
 		NodesArray.push_back(_node);
 	};
 
-	std::vector<Node> NodesArray;
+	void makeNodes(std::vector<Node> &_nodeArray)
+	{
+		for (Node n : _nodeArray)
+		{
+			addNode(n);
+		}
+	};
+	
+	std::vector<Node> NodesArray; //Holds all Nodes
 
 private:
 
@@ -207,15 +244,6 @@ private:
 ////////////////////////////////////
 //Debug and other helping fuctions//
 ////////////////////////////////////
-
-void MakeAllNeighbours(std::vector<Node> &_nodeArray, std::vector<int> _array)
-{
-	for (int i : _array)
-	for (int j : _array)
-	{
-		_nodeArray[i].addNeighbour(&_nodeArray[j]);
-	}
-};
 
 //Debug print to console <const char*>
 void print(const char* _string) {

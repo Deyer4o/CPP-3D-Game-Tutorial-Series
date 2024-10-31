@@ -25,12 +25,14 @@ SOFTWARE.*/
 #include "SpaceShooterGame.h"
 #include "Spaceship.h"
 #include "Deyan/DeyanPathfinder.h"
+#include "Deyan/DPathfinder_Project_Specific.h"
 #include <time.h>
 
 
 
 SpaceShooterGame::SpaceShooterGame()
 {
+	InitMats();
 }
 
 SpaceShooterGame::~SpaceShooterGame()
@@ -60,37 +62,53 @@ void SpaceShooterGame::onCreate()
 		auto entity = createEntity<CXLightEntity>();
 		entity->setColor(CXVec3(1, 1, 1));
 		entity->setRotation(CXVec3(-0.707f, 0.707f, 0));
+		entity->setPosition(CXVec3(-20.0f, -20.0f, -808.0f));
+	}
+	//Adding DLightEntity
+	//{
+	//	auto entity = createEntity<CXLightEntity>();
+	//	entity->setColor(CXVec3(1, 1, 1));
+	//	entity->setRotation(CXVec3(30.707f, -0.707f, 0));
+	//	entity->setPosition(CXVec3(-20.0f, -20.0f, -428.0f));
+	//}
+	//Adding DLightEntity
+	{
+		auto entity = createEntity<CXLightEntity>();
+		entity->setColor(CXVec3(1, 1, 1));
+		entity->setRotation(CXVec3(-0.707f, -50.707f, 0));
+		entity->setPosition(CXVec3(-20.0f, -20.0f, -828.0f));
 	}
 
 	//Adding DLightEntity
 	{
 		auto entity = createEntity<CXLightEntity>();
-		entity->setColor(CXVec3(1, 0, 0));
-		entity->setRotation(CXVec3(0.707f, 0.707f, 0));
+		entity->setColor(CXVec3(1, 1, 1));
+		entity->setRotation(CXVec3(0.707f, 110.707f, 0));
+		entity->setPosition(CXVec3(-20.0f, -20.0f, -928.0f));
 	}
 
+	//Adding DLightEntity
+	{
+		auto entity = createEntity<CXLightEntity>();
+		entity->setColor(CXVec3(1, 1, 1));
+		entity->setRotation(CXVec3(45.707f, -0.707f, 0));
+		entity->setPosition(CXVec3(-20.0f, -20.0f, -928.0f));
+	}
+
+	//Adding Spaceship
+
+	auto Player = createEntity<Spaceship>();
+	//Player = &entity;
+	//Player->m_print = true;
+
+	
 
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-	auto tex = createTexture(L"Assets/Textures/orange.jpg");
 	auto mesh_sphere = createMesh(L"Assets/Meshes/sphere.obj");
+	auto tex = createTexture(L"Assets/Textures/blue.jpg");
+	
 	//auto mesh_cube = createMesh(L"Assets/Meshes/Cube.obj");
 	auto mat = createMaterial(L"Assets/Shaders/base.hlsl");
 	mat->addTexture(tex);
@@ -102,64 +120,64 @@ void SpaceShooterGame::onCreate()
 
 
 
-
-	//Adding Pathfinding Array 
-	DeyanPathfinder pathfinder;
 	
+	
+	
+	
+	
+	
+	
+	
+
+
+
+
+
+	
+
 
 
 	//Custom approach:
 
+
+	//Adding Pathfinder 
+	DPathfinder pathfinder;
+	
 	std::vector<Node> nodeArray;
 	//Node_ID = 0;
-
-	nodeArray.push_back(Node(0.0f, 0.0f, 400.0f));
-	nodeArray.push_back(Node(0.0f, 20.0f, 400.0f));
-	nodeArray.push_back(Node(20.0f, 30.0f, 400.0f));
-	nodeArray.push_back(Node(60.0f, 0.0f, 400.0f));
-	nodeArray.push_back(Node(30.0f, 100.0f, 400.0f));
-	nodeArray.push_back(Node(1000.0f, 0.0f, 400.0f));
-	nodeArray.push_back(Node(100.0f, 40.0f, 400.0f));
-	nodeArray.push_back(Node(100.0f, 50.0f, 400.0f));
-	nodeArray.push_back(Node(40.0f, 20.0f, 400.0f));
-	nodeArray.push_back(Node(60.0f, 80.0f, 400.0f));
+	float z = -300.0f;
+	nodeArray.push_back(Node(0.0f, 0.0f, z));	 //0
+	nodeArray.push_back(Node(0.0f, 200.0f, z));	 //1
+	nodeArray.push_back(Node(200.0f, 300.0f, z)); //2
+	nodeArray.push_back(Node(600.0f, 0.0f, z));	 //3
+	nodeArray.push_back(Node(300.0f, 500.0f, z));//4
+	nodeArray.push_back(Node(1000.0f, 0.0f, z));//5
+	nodeArray.push_back(Node(1000.0f, 400.0f, z));//6
+	nodeArray.push_back(Node(1000.0f, 500.0f, z));//7
+	nodeArray.push_back(Node(400.0f, 200.0f, z)); //8
+	nodeArray.push_back(Node(600.0f, 800.0f, z)); //9
 	
-	//nodeArray[3].addNeighbours({ nodeArray[4] , nodeArray[5] });
-	//nodeArray[3].addNeighbours({ nodeArray[4] , nodeArray[5] });
+	pathfinder.makeNodes(nodeArray);
 
-	//nodeArray[3].addNeighbour(&nodeArray[4]);
-	//nodeArray[3].addNeighbour(&nodeArray[5]);
-	//nodeArray[3].addNeighbour(&nodeArray[3]);
-	//nodeArray[3].addNeighbour(&nodeArray[4]);
-	//nodeArray[4].ID = 69;
-	
-	//nodeArray[3].addNeighbours({ &nodeArray[3] , &nodeArray[4] });
-	//Node MNArray[3] = { nodeArray[3] , nodeArray[4] , nodeArray[5] };
-	//MakeNeighbours({ nodeArray[3] , nodeArray[4] , nodeArray[5] });
 
-	//std::vector<Node>* nodeArrayPointer = &nodeArray;
-	//nodeArray[3].addNeighbours(nodeArrayPointer, { 3, 4, 5 });
+	pathfinder.NodesArray[3].addMultipleNeighbours(nodeArray, { 4, 5, 8 });
 
-	//print("test");
-	//MakeNeighbours(nodeArray, { 3, 4, 5, 8 });
-	
-	nodeArray[3].makeAllNeighbours(nodeArray, { 4, 5, 8 , 5, 4});
+	//nodeArray[3].printNeighbours();
 
-	nodeArray[3].ID = 33;
-	nodeArray[5].ID = 555;// change param here to test for cross neighbours
-
-	nodeArray[3].printNeighbours(); 
-	nodeArray[5].printNeighbours();
-	//print(nodeArray[4]);
 	//nodeArray[4].printNeighbours();
-	//nodeArray[5].printNeighbours();
 
-	for (int i = 0; i < 10; i++)
+	pathfinder.print();
+	pathfinder.NodesArray[3].printNeighbours();
+
+
+
+
+	for (Node n : pathfinder.NodesArray) 
 	{
-		//print(nodeArray[i]);
+		MakeSphere(n.location, 30.0f, matBlue);
 	}
-		//pathfinder.addNode();
-	
+
+	MakeLine(CXVec3(0,0,0), CXVec3(200, 500, 400), 50, 10.0f, matRed);
 
 
 
@@ -205,7 +223,7 @@ void SpaceShooterGame::onCreate()
 
 
 
-	pathfinder.print();
+	//pathfinder.print();
 
 
 
@@ -227,10 +245,8 @@ void SpaceShooterGame::onCreate()
 
 
 
-	//Adding Spaceship
-	{
-		auto entity = createEntity<Spaceship>();
-	}
+	
+	
 	//Enable Play Mode - Cursor locked at the center of screen and invisible
 	getInputManager()->enablePlayMode(m_input);
 }
@@ -243,6 +259,8 @@ void SpaceShooterGame::onUpdate(f32 deltaTime)
 		m_input = !m_input;
 		getInputManager()->enablePlayMode(m_input);
 	}
+	
+	
 }
 
 void SpaceShooterGame::onQuit()

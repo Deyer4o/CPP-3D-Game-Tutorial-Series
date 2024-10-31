@@ -26,6 +26,7 @@ SOFTWARE.*/
 #include "Projectile.h"
 
 
+
 Spaceship::Spaceship()
 {
 }
@@ -54,6 +55,7 @@ void Spaceship::onCreate()
 
 void Spaceship::onUpdate(f32 deltaTime)
 {
+	print();
 	auto input = getGame()->getInputManager();
 
 	f32 forward = 0.0f;
@@ -176,4 +178,9 @@ void Spaceship::onUpdate(f32 deltaTime)
 		proj->m_dir = zdir;
 		proj->setPosition(pos);
 	}
+}
+
+void Spaceship::print()
+{
+	if(m_print) std::cout << "Player position: X:" << getPosition().x << " Y:" << getPosition().y << " Z:" << getPosition().z << std::endl;
 }

@@ -34,6 +34,9 @@ public:
 	virtual void onCreate();
 	virtual void onUpdate(f32 deltaTime);
 
+	void print();
+	bool m_print = false;
+
 private:
 	f32 m_pitch = 0.0f;
 	f32 m_yaw = 0.0f;

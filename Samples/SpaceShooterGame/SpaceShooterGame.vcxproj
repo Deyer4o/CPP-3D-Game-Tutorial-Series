@@ -169,9 +169,19 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Deyan\DeyanPathfinder.h" />
+    <ClInclude Include="Source\Deyan\DPathfinder_Project_Specific.h" />
     <ClInclude Include="Source\Projectile.h" />
     <ClInclude Include="Source\Spaceship.h" />
     <ClInclude Include="Source\SpaceShooterGame.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="Assets\Textures\blue.jpg" />
+    <Image Include="Assets\Textures\green.jpg" />
+    <Image Include="Assets\Textures\orange.jpg" />
+    <Image Include="Assets\Textures\pink.jpg" />
+    <Image Include="Assets\Textures\purple.jpg" />
+    <Image Include="Assets\Textures\red.jpg" />
+    <Image Include="Assets\Textures\white.jpg" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
