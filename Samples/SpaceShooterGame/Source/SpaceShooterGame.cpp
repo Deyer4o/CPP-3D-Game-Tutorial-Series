@@ -167,11 +167,17 @@ void SpaceShooterGame::onCreate()
 	pathfinder.NodesArray[5].addMultipleNeighbours(pathfinder.NodesArray, { 6			});	
 
 	std::vector<int> start_end =		{ 0, 7	}; //only 2 Node IDs 
-	std::vector<int> testNeighbours =	{		};
+	std::vector<int> testNeighbours =	{	1	};
 	std::vector<int> testPurple =		{		};
 	std::vector<int> testGreen =		{		};
 
+	////////////////////////////////////
+	////		Functionality		////
+	////////////////////////////////////
 
+	pathfinder.startNode = &pathfinder.NodesArray[start_end[0]];
+	pathfinder.endNode = &pathfinder.NodesArray[start_end[1]];
+	
 
 	////////////////////////////
 	////		DEBUG		////
@@ -182,6 +188,13 @@ void SpaceShooterGame::onCreate()
 	//pathfinder.NodesArray[4].printNeighbours();
 	pathfinder.printNeighbours();
 
+	int offset = -30;
+	for (int y = -1; y <= 1; y++)
+	for (int x = -1; x <= 1; x++)
+	{
+		MakeSphere(pathfinder.startNode->location + Vec3(offset * x, offset * y, offset), 30.0f, matGreen);
+		MakeSphere(pathfinder.endNode->location + Vec3(offset * x, offset * y, offset), 30.0f, matRed);
+	}
 
 	for (int t : testNeighbours)
 	{
@@ -193,7 +206,6 @@ void SpaceShooterGame::onCreate()
 			MakeLine(pathfinder.NodesArray[t].location + Vec3(0, 0, dist), f->location + Vec3(0, 0, dist), 5.0f, matPink);
 		};
 	}
-
 	
 	for (int t : testPurple)
 	{
@@ -204,13 +216,12 @@ void SpaceShooterGame::onCreate()
 		MakeSphere(pathfinder.NodesArray[t].location + Vec3(0, 0, -80), 30.0f, matGreen);
 	}
 	
-
 	for (Node n : pathfinder.NodesArray) 
 	{
 		
 		//if(n.ID <= lastmatNum && n.ID >= 0)MakeSphere(n.location, 30.0f, matNumbers[n.ID]);
-		sceneNumber(n.location, n.ID, 30.0f);
-		sceneNumber(n.location - Vec3(30,-30,0), n.value, 10.0f);
+		printNumberInScene(n.location, n.ID, 30.0f);
+		printNumberInScene(n.location - Vec3(30,-30,0), n.value, 10.0f);
 		for (Node* f : pathfinder.NodesArray[n.ID].NodeNeighbours)
 		{
 			MakeLine(pathfinder.NodesArray[n.ID].location, f->location, 2.0f, matRed);
@@ -218,11 +229,7 @@ void SpaceShooterGame::onCreate()
 	}
 
 
-	////////////////////////////////////
-	////		Functionality		////
-	////////////////////////////////////
-
-
+	
 
 	//Enable Play Mode - Cursor locked at the center of screen and invisible
 	getInputManager()->enablePlayMode(m_input);

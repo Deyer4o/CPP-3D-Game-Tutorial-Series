@@ -153,7 +153,7 @@ public:
 		return ent;
 	}
 
-	void sceneNumber(CXVec3 _location, int _number, float _size) 
+	void printNumberInScene(CXVec3 _location, int _number, float _size) 
 	{
 		std::string sNum = std::to_string(_number);
 
