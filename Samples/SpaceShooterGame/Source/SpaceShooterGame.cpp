@@ -28,7 +28,8 @@ SOFTWARE.*/
 #include "Deyan/DPathfinder_Project_Specific.h"
 #include <time.h>
 
-
+//Adding Pathfinder 
+DPathfinder pathfinder;
 
 SpaceShooterGame::SpaceShooterGame()
 {
@@ -142,8 +143,8 @@ void SpaceShooterGame::onCreate()
 	////////////////////////////
 	
 
-	//Adding Pathfinder 
-	DPathfinder pathfinder;
+	//Pathfinder is added in static space outside of this scope 
+	//DPathfinder pathfinder;
 	
 	float z = -300.0f;
 	pathfinder.NodesArray.push_back(Node(	0.0f,		0.0f,		z));	//0
@@ -158,8 +159,8 @@ void SpaceShooterGame::onCreate()
 	pathfinder.NodesArray.push_back(Node(	600.0f,		800.0f,		z));	//9
 	pathfinder.NodesArray.push_back(Node(	750.0f,		430.0f,		z));	//10
 
-	pathfinder.NodesArray[3].addMultipleNeighbours(pathfinder.NodesArray, { 4, 5, 8		});
-	pathfinder.NodesArray[0].addMultipleNeighbours(pathfinder.NodesArray, { 1, 5, 2		});
+	pathfinder.NodesArray[3].addMultipleNeighbours(pathfinder.NodesArray, { 4, 5, 8, 0	});
+	pathfinder.NodesArray[0].addMultipleNeighbours(pathfinder.NodesArray, { 1, 2		});
 	pathfinder.NodesArray[2].addMultipleNeighbours(pathfinder.NodesArray, { 4, 1		});
 	pathfinder.NodesArray[8].addMultipleNeighbours(pathfinder.NodesArray, { 9, 4		});
 	pathfinder.NodesArray[10].addMultipleNeighbours(pathfinder.NodesArray,{ 3, 9, 7, 6	});
@@ -167,9 +168,7 @@ void SpaceShooterGame::onCreate()
 	pathfinder.NodesArray[5].addMultipleNeighbours(pathfinder.NodesArray, { 6			});	
 
 	std::vector<int> start_end =		{ 0, 7	}; //only 2 Node IDs 
-	std::vector<int> testNeighbours =	{	1	};
-	std::vector<int> testPurple =		{		};
-	std::vector<int> testGreen =		{		};
+	
 
 	////////////////////////////////////
 	////		Functionality		////
@@ -178,15 +177,55 @@ void SpaceShooterGame::onCreate()
 	pathfinder.startNode = &pathfinder.NodesArray[start_end[0]];
 	pathfinder.endNode = &pathfinder.NodesArray[start_end[1]];
 	
+	pathfinder.Start();
+	pathfinder.CalculateNeighboursNodeCosts(pathfinder.currentlyLookingAt);
+	//int endc = 0;
+	while (!pathfinder.finished)
+	{
+		//endc++;
+		if (!pathfinder.currentlyLookingAt->fullyChecked) 
+		{
+			//pathfinder.currentlyLookingAt = pathfinder.currentLowestNode;
+			pathfinder.CalculateNeighboursNodeCosts(pathfinder.currentlyLookingAt);
+			pathfinder.CalculateLowestFromUnlocked();
+		}
+		else 
+		{
+			pathfinder.CalculateLowestFromUnlocked();
+		}
+		
+		//if (endc >= 6) pathfinder.finished = true;
+		
+	}
 
 	////////////////////////////
 	////		DEBUG		////
 	////////////////////////////
 
+	std::vector<int> testNeighbours={		};
+	std::vector<int> testPurple =	{ pathfinder.currentlyLookingAt->ID };
+	std::vector<int> testGreen =	{		};
+	std::vector<int> testRed = {		};
+	//std::vector<int> endRoute = {		};
+	
+	for (Node* n : pathfinder.currentlyUnlocked) 
+	{
+		testGreen.push_back(n->ID);
+	}
+	for (Node* n : pathfinder.currentlyFullyChcked)
+	{
+		testRed.push_back(n->ID);
+	}
 
 	//nodeArray[3].printNeighbours();
 	//pathfinder.NodesArray[4].printNeighbours();
-	pathfinder.printNeighbours();
+	//pathfinder.printNeighbours();
+	print(pathfinder.shortestEndPath);
+	for (int i = 0; i < pathfinder.shortestEndPath.size() - 1 ; i++)
+	{
+		int dist = 200;
+		MakeLine(pathfinder.shortestEndPath[i]->location + Vec3(0, 0, dist), pathfinder.shortestEndPath[i+1]->location + Vec3(0, 0, dist), 5.0f, matGreen);
+	}
 
 	int offset = -30;
 	for (int y = -1; y <= 1; y++)
@@ -215,13 +254,21 @@ void SpaceShooterGame::onCreate()
 	{
 		MakeSphere(pathfinder.NodesArray[t].location + Vec3(0, 0, -80), 30.0f, matGreen);
 	}
+	for (int t : testRed)
+	{
+		MakeSphere(pathfinder.NodesArray[t].location + Vec3(0, 0, -80), 30.0f, matRed);
+	}
 	
 	for (Node n : pathfinder.NodesArray) 
 	{
 		
 		//if(n.ID <= lastmatNum && n.ID >= 0)MakeSphere(n.location, 30.0f, matNumbers[n.ID]);
 		printNumberInScene(n.location, n.ID, 30.0f);
-		printNumberInScene(n.location - Vec3(30,-30,0), n.value, 10.0f);
+		int offset = 40;
+		if (n.ID >= 10) offset = 90;
+		printNumberInScene(n.location - Vec3(offset, -30	 -15, 0), n.Gcost, 10.0f);
+		printNumberInScene(n.location - Vec3(offset, 0	 -15, 0), n.Hcost, 10.0f);
+		printNumberInScene(n.location - Vec3(offset, 30 -15, 0), n.Fcost, 10.0f);
 		for (Node* f : pathfinder.NodesArray[n.ID].NodeNeighbours)
 		{
 			MakeLine(pathfinder.NodesArray[n.ID].location, f->location, 2.0f, matRed);
@@ -235,9 +282,16 @@ void SpaceShooterGame::onCreate()
 	getInputManager()->enablePlayMode(m_input);
 }
 
-
+f32 timerf32 = 0;
 void SpaceShooterGame::onUpdate(f32 deltaTime)
 {
+	//timerf32 += deltaTime;
+	//double timer = timerf32;
+	//std::cout << timer << std::endl;
+
+	
+	
+
 	if(getInputManager()->isKeyUp(CXKey::Escape))
 	{
 		m_input = !m_input;

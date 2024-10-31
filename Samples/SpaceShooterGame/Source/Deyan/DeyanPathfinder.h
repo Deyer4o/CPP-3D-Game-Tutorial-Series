@@ -32,7 +32,7 @@ public:
 	Node() 
 	{
 		location = Vec3(0.0f, 0.0f, 0.0f);
-		value = INF;
+		Fcost = INF;
 		AssignId();
 	};
 
@@ -40,15 +40,15 @@ public:
 	Node(Vec3 _location)
 	{
 		location = _location;
-		value = INF;
+		Fcost = INF;
 		AssignId();
 	};
 
-	//Node constructor with location <Vec3> and value <long long>
-	Node(Vec3 _location, long long int _value)
+	//Node constructor with location <Vec3> and Fcost <long long>
+	Node(Vec3 _location, long long int _Fcost)
 	{
 		location = _location;
-		value = _value;
+		Fcost = _Fcost;
 		AssignId();
 	};
 
@@ -56,7 +56,7 @@ public:
 	Node(float _x, float _y, float _z)
 	{
 		location = Vec3(_x,_y,_z);
-		value = INF;
+		Fcost = INF;
 		AssignId();
 	};
 
@@ -66,15 +66,15 @@ public:
 		
 	};
 
-	//Debug print to console (ID, value, location)
+	//Debug print to console (ID, Fcost, location)
 	void print() 
 	{
-		std::cout << "Node " << ID << ": value = " << value << ": location = X:" << location.x << " Y:" << location.y << " Z:" << location.z << std::endl;
+		std::cout << "Node " << ID << ": Fcost = " << Fcost << ": location = X:" << location.x << " Y:" << location.y << " Z:" << location.z << std::endl;
 	};
 
 
 
-	//Debug print of Node and Neighbours to console (ID, value, location)
+	//Debug print of Node and Neighbours to console (ID, Fcost, location)
 	void printNeighbours()
 	{
 		//print();
@@ -145,19 +145,38 @@ public:
 		}
 	};
 
+	//Calculates the distance from another node in double precision
+	double distanceFromNode(Node* _node) 
+	{
+		return hypot(hypot(location.x - _node->location.x, location.y - _node->location.y), location.z - _node->location.z);
+	}
 
+	bool IsThisLowerThanCurrentCameFromLowest(Node* _node)
+	{	
+		if (_node->cameFromLowest == nullptr) return true;
+		if (_node->cameFromLowest->Fcost <= Fcost)
+		{
+			return true;
+		}
+		else return false;
+	}
 
 	//Unique Node ID (0,1,2...)
 	int ID = -1;
 
 	//Node 3D location (for 2D, just ignore Z)
 	Vec3 location = Vec3();
-	//value of
-	long long int value = INF;
+
+	long long int Fcost = INF;
+	long long int Gcost = INF;
+	long long int Hcost = INF;
+	bool fullyChecked = false;
+	Node* cameFromLowest = nullptr;
+
 	std::vector<Node*> NodeNeighbours;
 
 private:
-	long long int valueToGoal = INF; //used for A* pathfinder addition on top of Dijkstra
+	long long int FcostToGoal = INF; //used for A* pathfinder addition on top of Dijkstra
 	bool FULLY_CHECKED = false; //used for the pathfinding algorithm - flags if all neighbours have already been checked
 
 	void AssignId() 
@@ -264,10 +283,105 @@ public:
 		}
 	};
 	
+	//this should be called before the calculation loop
+	void Start() 
+	{
+		finished = false;
+		currentlyLookingAt = startNode;
+		currentLowestNode = startNode;
+		currentLowestFcost = INF;
+
+		startNode->Gcost = 0;
+		startNode->Hcost = startNode->distanceFromNode(endNode); //INF;
+		startNode->Fcost = startNode->Gcost + startNode->Hcost;
+		currentlyFullyChcked.push_back(startNode);
+		startNode->cameFromLowest = startNode;
+	}
+
+	
+
+	void End() ///////////////////////////////////////////////////////////////////////////this still needs to be fixed!!!!!!!!
+	{
+		finished = true;
+
+		for (Node* n : currentlyFullyChcked)
+		{
+			if(endNode == n->cameFromLowest)
+			shortestEndPath.insert(shortestEndPath.begin(), n);
+		}
+
+		bool br = false;
+		for (Node* n : currentlyFullyChcked) 
+		{
+			for (Node* z : currentlyFullyChcked)
+			{
+				if (n == z->cameFromLowest) 
+				{
+					shortestEndPath.insert(shortestEndPath.begin(), z);
+					if (n == endNode) br = true;
+					if (br) break;
+				}
+				if (br) break;
+			}
+		}
+
+	}
+
+	//Gets lowest Node from currentlyUnlocked
+	void CalculateLowestFromUnlocked() 
+	{
+		currentLowestFcost = INF;
+		for (Node* n : currentlyUnlocked)
+		{
+			if (n->Fcost <= currentLowestFcost && !n->fullyChecked) 
+			{
+				currentLowestFcost = n->Fcost;
+				currentLowestNode = n;
+			}
+		}
+		currentlyLookingAt = currentLowestNode;
+	}
+
+	//calculates G, H, F costs for given _node
+	void CalculateNeighboursNodeCosts(Node* _node) 
+	{
+		
+		for (Node* n : _node->NodeNeighbours)
+		{
+			if (!n->fullyChecked && n->IsThisLowerThanCurrentCameFromLowest(_node))
+			{
+				currentlyUnlocked.push_back(n);
+				n->Gcost = _node->Gcost + _node->distanceFromNode(n);
+				n->Hcost = n->distanceFromNode(endNode);
+				n->Fcost = n->Gcost + n->Hcost;
+			}
+			//if (n->Fcost <= currentLowestFcost) currentLowestFcost = n->Fcost;
+			if (n == endNode) End();
+		}
+		for (Node* n : currentlyUnlocked)
+		{
+			if (n == _node) {
+				//currentlyUnlocked.erase(n);
+				currentlyFullyChcked.push_back(n);
+				currentlyUnlocked.erase(std::remove(currentlyUnlocked.begin(), currentlyUnlocked.end(), n), currentlyUnlocked.end());
+			}
+		}
+		_node->fullyChecked = true;
+	}
+
 	std::vector<Node> NodesArray; //Holds all Nodes
 
 	Node* startNode = nullptr;
 	Node* endNode = nullptr;
+
+	Node* currentlyLookingAt = nullptr;
+	Node* currentLowestNode = nullptr;
+	float currentLowestFcost = INF;
+	std::vector<Node*> currentlyUnlocked;
+	std::vector<Node*> currentlyFullyChcked;
+	std::vector<Node*> shortestEndPath;
+
+	bool finished = false;
 
 private:
 
@@ -297,6 +411,20 @@ void print(int _int) {
 void print(Node& _node) {
 	_node.print();
 };
+
+//Debug print to console <Node>
+void print(Node* _node) {
+	_node->print();
+};
+
+//Debug print to console std::vector<Node*>
+void print(std::vector<Node*> _array) 
+{
+	for (Node* n : _array) 
+	{
+		print(n);
+	}
+}
 
 
 //ToDO:
