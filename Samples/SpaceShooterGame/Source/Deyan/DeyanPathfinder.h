@@ -66,6 +66,8 @@ public:
 		std::cout << "Node " << ID << ": value = " << value << ": location = X:" << location.x << " Y:" << location.y << " Z:" << location.z << std::endl;
 	};
 
+
+
 	//Debug print of Node and Neighbours to console (ID, value, location)
 	void printNeighbours()
 	{
@@ -163,14 +165,14 @@ private:
 };
 //end of Node class
 
-void MakeAllNeighbours(std::vector<Node>& _nodeArray, std::vector<int> _array)
+/*void MakeAllNeighbours(std::vector<Node>& _nodeArray, std::vector<int> _array)
 {
 	for (int i : _array)
 		for (int j : _array)
 		{
 			_nodeArray[i].addNeighbour(&_nodeArray[j]);
 		}
-};
+};*/
 
 /////////////////////////////////
 //Main Pathfinder functionality//

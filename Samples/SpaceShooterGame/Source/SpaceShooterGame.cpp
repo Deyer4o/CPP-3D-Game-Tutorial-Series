@@ -33,6 +33,7 @@ SOFTWARE.*/
 SpaceShooterGame::SpaceShooterGame()
 {
 	InitMats();
+	InitNumMats();
 }
 
 SpaceShooterGame::~SpaceShooterGame()
@@ -106,12 +107,12 @@ void SpaceShooterGame::onCreate()
 
 
 
-	auto mesh_sphere = createMesh(L"Assets/Meshes/sphere.obj");
-	auto tex = createTexture(L"Assets/Textures/blue.jpg");
+	//auto mesh_sphere = createMesh(L"Assets/Meshes/sphere.obj");
+	//auto tex = createTexture(L"Assets/Textures/blue.jpg");
 	
 	//auto mesh_cube = createMesh(L"Assets/Meshes/Cube.obj");
-	auto mat = createMaterial(L"Assets/Shaders/base.hlsl");
-	mat->addTexture(tex);
+	//auto mat = createMaterial(L"Assets/Shaders/base.hlsl");
+	//mat->addTexture(tex);
 
 
 
@@ -146,39 +147,93 @@ void SpaceShooterGame::onCreate()
 	std::vector<Node> nodeArray;
 	//Node_ID = 0;
 	float z = -300.0f;
-	nodeArray.push_back(Node(0.0f, 0.0f, z));	 //0
-	nodeArray.push_back(Node(0.0f, 200.0f, z));	 //1
-	nodeArray.push_back(Node(200.0f, 300.0f, z)); //2
-	nodeArray.push_back(Node(600.0f, 0.0f, z));	 //3
-	nodeArray.push_back(Node(300.0f, 500.0f, z));//4
-	nodeArray.push_back(Node(1000.0f, 0.0f, z));//5
-	nodeArray.push_back(Node(1000.0f, 400.0f, z));//6
-	nodeArray.push_back(Node(1000.0f, 500.0f, z));//7
-	nodeArray.push_back(Node(400.0f, 200.0f, z)); //8
-	nodeArray.push_back(Node(600.0f, 800.0f, z)); //9
+	float dZ = 0.0f;
+	nodeArray.push_back(Node(0.0f, 0.0f, z));		//0
+	z += dZ;
+	nodeArray.push_back(Node(0.0f, 200.0f, z));		//1
+	z += dZ;
+	nodeArray.push_back(Node(200.0f, 300.0f, z));	//2
+	z += dZ;
+	nodeArray.push_back(Node(600.0f, 0.0f, z));		//3
+	z += dZ;
+	nodeArray.push_back(Node(300.0f, 500.0f, z));	//4
+	z += dZ;
+	nodeArray.push_back(Node(1000.0f, 0.0f, z));	//5
+	z += dZ;
+	nodeArray.push_back(Node(1000.0f, 400.0f, z));	//6
+	z += dZ;
+	nodeArray.push_back(Node(1000.0f, 500.0f, z));	//7
+	z += dZ;
+	nodeArray.push_back(Node(400.0f, 800.0f, z));	//8
+	z += dZ;
+	nodeArray.push_back(Node(600.0f, 800.0f, z));	//9
+	z += dZ;
+	nodeArray.push_back(Node(750.0f, 430.0f, z));	//10
+	z += dZ;
 	
 	pathfinder.makeNodes(nodeArray);
 
 
-	pathfinder.NodesArray[3].addMultipleNeighbours(nodeArray, { 4, 5, 8 });
+	pathfinder.NodesArray[3].addMultipleNeighbours(pathfinder.NodesArray, { 4, 5, 8 });
+	pathfinder.NodesArray[0].addMultipleNeighbours(pathfinder.NodesArray, { 1, 5, 2 });
+	pathfinder.NodesArray[2].addMultipleNeighbours(pathfinder.NodesArray, { 4, 1 });
+	pathfinder.NodesArray[8].addMultipleNeighbours(pathfinder.NodesArray, { 9, 4 });
+	pathfinder.NodesArray[10].addMultipleNeighbours(pathfinder.NodesArray, { 3, 9, 7, 6});
+	pathfinder.NodesArray[7].addMultipleNeighbours(pathfinder.NodesArray, { 6, 9 });
+	pathfinder.NodesArray[5].addMultipleNeighbours(pathfinder.NodesArray, { 6 });
 
+
+	
 	//nodeArray[3].printNeighbours();
-
-	//nodeArray[4].printNeighbours();
+	pathfinder.NodesArray[4].printNeighbours();
 
 	pathfinder.print();
-	pathfinder.NodesArray[3].printNeighbours();
 
+	std::vector<int> testNeighbours = { };
+	std::vector<int> testPurple = {   };
+	std::vector<int> testGreen = {   };
 
+	for (int t : testNeighbours)
+	{
+		int dist = 100;
+		pathfinder.NodesArray[t].printNeighbours();
+		MakeSphere(pathfinder.NodesArray[t].location + CXVec3(0, 0, dist), 30.0f, matRed);
+		for (Node* f : pathfinder.NodesArray[t].NodeNeighbours)
+		{
+			MakeLine(pathfinder.NodesArray[t].location + CXVec3(0, 0, dist), f->location + CXVec3(0, 0, dist), 5.0f, matPink);
+		};
+	}
 
+	
+	
+	for (int t : testPurple)
+	{
+		MakeSphere(pathfinder.NodesArray[t].location + CXVec3(0, 0, -80), 30.0f, matPurple);
+	}
+	for (int t : testGreen)
+	{
+		MakeSphere(pathfinder.NodesArray[t].location + CXVec3(0, 0, -80), 30.0f, matGreen);
+	}
+	
 
 	for (Node n : pathfinder.NodesArray) 
 	{
-		MakeSphere(n.location, 30.0f, matBlue);
+		
+		//if(n.ID <= lastmatNum && n.ID >= 0)MakeSphere(n.location, 30.0f, matNumbers[n.ID]);
+		sceneNumber(n.location, n.ID, 30.0f);
+		sceneNumber(n.location - CXVec3(30,-30,0), n.value, 10.0f);
+		for (Node* f : pathfinder.NodesArray[n.ID].NodeNeighbours)
+		{
+			MakeLine(pathfinder.NodesArray[n.ID].location, f->location, 2.0f, matRed);
+		};
 	}
 
-	MakeLine(CXVec3(0,0,0), CXVec3(200, 500, 400), 50, 10.0f, matRed);
+	
 
+	//MakeLine(pathfinder.NodesArray[3].location, pathfinder.NodesArray[8].location, 5.0f, matRed);
+	// 
+
+	//DrawPathsToNeighbours(&pathfinder.NodesArray[3], 5.0f, matPurple);
 
 
 	// Array approach:
@@ -260,7 +315,7 @@ void SpaceShooterGame::onUpdate(f32 deltaTime)
 		getInputManager()->enablePlayMode(m_input);
 	}
 	
-	
+	//entholder[1]->setPosition(entholder[1]->getPosition()+CXVec3(1,0,0));
 }
 
 void SpaceShooterGame::onQuit()

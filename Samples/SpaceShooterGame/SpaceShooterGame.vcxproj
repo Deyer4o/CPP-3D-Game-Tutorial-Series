@@ -175,6 +175,18 @@
     <ClInclude Include="Source\SpaceShooterGame.h" />
   </ItemGroup>
   <ItemGroup>
+    <Image Include="Assets\Textures\0.jpg" />
+    <Image Include="Assets\Textures\1.jpg" />
+    <Image Include="Assets\Textures\10.jpg" />
+    <Image Include="Assets\Textures\11.jpg" />
+    <Image Include="Assets\Textures\2.jpg" />
+    <Image Include="Assets\Textures\3.jpg" />
+    <Image Include="Assets\Textures\4.jpg" />
+    <Image Include="Assets\Textures\5.jpg" />
+    <Image Include="Assets\Textures\6.jpg" />
+    <Image Include="Assets\Textures\7.jpg" />
+    <Image Include="Assets\Textures\8.jpg" />
+    <Image Include="Assets\Textures\9.jpg" />
     <Image Include="Assets\Textures\blue.jpg" />
     <Image Include="Assets\Textures\green.jpg" />
     <Image Include="Assets\Textures\orange.jpg" />

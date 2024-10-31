@@ -25,6 +25,7 @@ SOFTWARE.*/
 #pragma once
 
 #include <CX3D/All.h>
+#include <string>
 
 class SpaceShooterGame : public CXGame
 {
@@ -59,6 +60,89 @@ public:
 	CXTexturePtr texPink = createTexture(L"Assets/Textures/pink.jpg");
 	CXMaterialPtr matPink = createMaterial(L"Assets/Shaders/base.hlsl");;
 
+	std::vector<CXMaterialPtr> matNumbers;
+	//std::vector<CXTexturePtr*> texNumbers;
+	CXTexturePtr tex0 = createTexture(L"Assets/Textures/0.jpg");
+	CXMaterialPtr mat0 = createMaterial(L"Assets/Shaders/base.hlsl");
+	CXTexturePtr tex1 = createTexture(L"Assets/Textures/1.jpg");
+	CXMaterialPtr mat1 = createMaterial(L"Assets/Shaders/base.hlsl");
+	CXTexturePtr tex2 = createTexture(L"Assets/Textures/2.jpg");
+	CXMaterialPtr mat2 = createMaterial(L"Assets/Shaders/base.hlsl");
+	CXTexturePtr tex3 = createTexture(L"Assets/Textures/3.jpg");
+	CXMaterialPtr mat3 = createMaterial(L"Assets/Shaders/base.hlsl");
+	CXTexturePtr tex4 = createTexture(L"Assets/Textures/4.jpg");
+	CXMaterialPtr mat4 = createMaterial(L"Assets/Shaders/base.hlsl");
+	CXTexturePtr tex5 = createTexture(L"Assets/Textures/5.jpg");
+	CXMaterialPtr mat5 = createMaterial(L"Assets/Shaders/base.hlsl");
+	CXTexturePtr tex6 = createTexture(L"Assets/Textures/6.jpg");
+	CXMaterialPtr mat6 = createMaterial(L"Assets/Shaders/base.hlsl");
+	CXTexturePtr tex7 = createTexture(L"Assets/Textures/7.jpg");
+	CXMaterialPtr mat7 = createMaterial(L"Assets/Shaders/base.hlsl");
+	CXTexturePtr tex8 = createTexture(L"Assets/Textures/8.jpg");
+	CXMaterialPtr mat8 = createMaterial(L"Assets/Shaders/base.hlsl");
+	CXTexturePtr tex9 = createTexture(L"Assets/Textures/9.jpg");
+	CXMaterialPtr mat9 = createMaterial(L"Assets/Shaders/base.hlsl");
+	CXTexturePtr tex10 = createTexture(L"Assets/Textures/10.jpg");
+	CXMaterialPtr mat10 = createMaterial(L"Assets/Shaders/base.hlsl");
+	CXTexturePtr tex11 = createTexture(L"Assets/Textures/11.jpg");
+	CXMaterialPtr mat11 = createMaterial(L"Assets/Shaders/base.hlsl");
+	int lastmatNum = 11;
+	void InitNumMats()
+	{
+
+		//CXTexturePtr tex0 = createTexture(L"Assets/Textures/0.jpg");
+		//CXMaterialPtr mat0 = createMaterial(L"Assets/Shaders/base.hlsl");
+		mat0->addTexture(tex0);
+		//CXTexturePtr tex1 = createTexture(L"Assets/Textures/1.jpg");
+		//CXMaterialPtr mat1 = createMaterial(L"Assets/Shaders/base.hlsl");
+		mat1->addTexture(tex1);
+		//CXTexturePtr tex2 = createTexture(L"Assets/Textures/2.jpg");
+		//CXMaterialPtr mat2 = createMaterial(L"Assets/Shaders/base.hlsl");
+		mat2->addTexture(tex2);
+		//CXTexturePtr tex3 = createTexture(L"Assets/Textures/3.jpg");
+		//CXMaterialPtr mat3 = createMaterial(L"Assets/Shaders/base.hlsl");
+		mat3->addTexture(tex3);
+		//CXTexturePtr tex4 = createTexture(L"Assets/Textures/4.jpg");
+		//CXMaterialPtr mat4 = createMaterial(L"Assets/Shaders/base.hlsl");
+		mat4->addTexture(tex4);
+		//CXTexturePtr tex5 = createTexture(L"Assets/Textures/5.jpg");
+		//CXMaterialPtr mat5 = createMaterial(L"Assets/Shaders/base.hlsl");
+		mat5->addTexture(tex5);
+		//CXTexturePtr tex6 = createTexture(L"Assets/Textures/6.jpg");
+		//CXMaterialPtr mat6 = createMaterial(L"Assets/Shaders/base.hlsl");
+		mat6->addTexture(tex6);
+		//CXTexturePtr tex7 = createTexture(L"Assets/Textures/7.jpg");
+		//CXMaterialPtr mat7 = createMaterial(L"Assets/Shaders/base.hlsl");
+		mat7->addTexture(tex7);
+		//CXTexturePtr tex8 = createTexture(L"Assets/Textures/8.jpg");
+		//CXMaterialPtr mat8 = createMaterial(L"Assets/Shaders/base.hlsl");
+		mat8->addTexture(tex8);
+		//CXTexturePtr tex9 = createTexture(L"Assets/Textures/9.jpg");
+		//CXMaterialPtr mat9 = createMaterial(L"Assets/Shaders/base.hlsl");
+		mat9->addTexture(tex9);
+		//CXTexturePtr tex10 = createTexture(L"Assets/Textures/10.jpg");
+		//CXMaterialPtr mat10 = createMaterial(L"Assets/Shaders/base.hlsl");
+		mat10->addTexture(tex10);
+		//CXTexturePtr tex11 = createTexture(L"Assets/Textures/11.jpg");
+		//CXMaterialPtr mat11 = createMaterial(L"Assets/Shaders/base.hlsl");
+		mat11->addTexture(tex11);
+
+		
+
+		matNumbers.push_back(mat0);
+		matNumbers.push_back(mat1);
+		matNumbers.push_back(mat2);
+		matNumbers.push_back(mat3);
+		matNumbers.push_back(mat4);
+		matNumbers.push_back(mat5);
+		matNumbers.push_back(mat6);
+		matNumbers.push_back(mat7);
+		matNumbers.push_back(mat8);
+		matNumbers.push_back(mat9);
+		matNumbers.push_back(mat10);
+		matNumbers.push_back(mat11);
+	}
+
 	void InitMats()
 	{
 		matWhite->addTexture(texWhite);
@@ -68,9 +152,21 @@ public:
 		matOrange->addTexture(texOrange);
 		matPurple->addTexture(texPurple);
 		matPink->addTexture(texPink);
+		//mat0->addTexture(tex0);
+		//mat1->addTexture(tex1);
+		//mat2->addTexture(tex2);
+		//mat3->addTexture(tex3);
+		//mat4->addTexture(tex4);
+		//mat5->addTexture(tex5);
+		//mat6->addTexture(tex6);
+		//mat7->addTexture(tex7);
+		//mat8->addTexture(tex8);
+		//mat9->addTexture(tex9);
+		//mat10->addTexture(tex10);
+		//mat11->addTexture(tex11);
 	}
 
-	void MakeSphere(CXVec3 _location,float _scale, CXMaterialPtr _mat)
+	auto* MakeSphere(CXVec3 _location,float _scale, CXMaterialPtr _mat)
 	{
 		auto ent = createEntity<CXMeshEntity>();
 		ent->setMesh(meshSphere);
@@ -78,9 +174,23 @@ public:
 		ent->setPosition(_location);
 		ent->setRotation(CXVec3());
 		ent->setScale(CXVec3(_scale, _scale, _scale));
+
+		return ent;
 	}
 
-	void MakeLine(CXVec3 _A, CXVec3 _B, float _steps, float _scale, CXMaterialPtr _mat) 
+	void sceneNumber(CXVec3 _location, int _number, float _size) 
+	{
+		std::string sNum = std::to_string(_number);
+
+		for (int i = 0; i < sNum.length(); i++) 
+		{
+			int x = (int)sNum[i] - 48;
+			MakeSphere(_location - CXVec3(i * _size * 1.5,0,0), _size,  matNumbers[x]);
+		}
+		
+	}
+
+	void MakeLine(CXVec3 _A, CXVec3 _B, float _scale, CXMaterialPtr _mat) 
 	{
 		// Compute vector from A to B by subtracting A from B
 		float X1 = _A.x;
@@ -95,7 +205,7 @@ public:
 		float dZ = Z2 - Z1;
 
 		// Start at A and interpolate along this vector
-		float steps = _steps;
+		float steps = (abs(dX) / _scale + abs(dY) / _scale + abs(dZ) / _scale) / 2;
 		
 		for (int step = 0; step <= steps; step++)
 		{
@@ -109,6 +219,7 @@ public:
 		
 	}
 	
+	//std::vector<CXMeshEntity*> entholder;
 
 	
 private:
