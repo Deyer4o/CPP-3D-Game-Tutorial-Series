@@ -8,9 +8,15 @@
 #define Vec3 CXVec3
 
 
-//////////////////////////////////
-//Pathfinder Nodes functionality//
-//////////////////////////////////
+
+
+////////////////////////////////////////////
+////									////
+////	Pathfinder Nodes functionality	////
+////									////
+////////////////////////////////////////////
+
+
 
 constexpr long long int INF = 999999999; //used instead of infinity - needs to be bigger than the biggest unit for the algorithm to work
 int Node_ID = 0; //this makes all Nodes unique - keep in mind, every time a Node constructor is called this increments by 1
@@ -145,9 +151,9 @@ public:
 	int ID = -1;
 
 	//Node 3D location (for 2D, just ignore Z)
-	Vec3 location;
+	Vec3 location = Vec3();
 	//value of
-	long long int value;
+	long long int value = INF;
 	std::vector<Node*> NodeNeighbours;
 
 private:
@@ -165,7 +171,9 @@ private:
 };
 //end of Node class
 
-/*void MakeAllNeighbours(std::vector<Node>& _nodeArray, std::vector<int> _array)
+//Makes all Nodes in _array neighbours with all other Nodes in _array
+/*
+void MakeAllNeighbours(std::vector<Node>& _nodeArray, std::vector<int> _array)
 {
 	for (int i : _array)
 		for (int j : _array)
@@ -174,9 +182,17 @@ private:
 		}
 };*/
 
-/////////////////////////////////
-//Main Pathfinder functionality//
-/////////////////////////////////
+
+
+
+////////////////////////////////////////////
+////									////
+////	Main Pathfinder functionality	////
+////									////
+////////////////////////////////////////////
+
+
+
 
 //DeyanPathfinder is holding the main functionality of the pathfinder
 class DPathfinder
@@ -220,6 +236,20 @@ public:
 		};
 	}
 
+	void printNeighbours()
+	{
+		std::cout << "------Printing ALL NEIGHBOURS from Pathfinder NodesArray------" << std::endl;
+		if (NodesArray.size() > 0)
+			for (Node member : NodesArray)
+			{
+				member.printNeighbours();
+			}
+		else
+		{
+			std::cout << "Nodes Array is Empty" << std::endl;
+		};
+	}
+
 	//Adds _node to NodesArray
 	void addNode(Node& _node)
 	{
@@ -236,6 +266,9 @@ public:
 	
 	std::vector<Node> NodesArray; //Holds all Nodes
 
+	Node* startNode = nullptr;
+	Node* endNode = nullptr;
+
 private:
 
 };
@@ -243,9 +276,12 @@ private:
 
 
 
-////////////////////////////////////
-//Debug and other helping fuctions//
-////////////////////////////////////
+////////////////////////////////////////////////
+////										////
+////	Debug and other helping fuctions	////
+////										////
+////////////////////////////////////////////////
+
 
 //Debug print to console <const char*>
 void print(const char* _string) {
