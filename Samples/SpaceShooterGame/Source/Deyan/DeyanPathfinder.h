@@ -153,9 +153,10 @@ public:
 
 	bool IsThisLowerThanCurrentCameFromLowest(Node* _node)
 	{	
-		if (_node->cameFromLowest == nullptr) return true;
-		if (_node->cameFromLowest->Fcost <= Fcost)
+		//if (_node->cameFromLowest == nullptr) return false;
+		if (cameFromLowest != nullptr && _node->cameFromLowest->Fcost <= Fcost)
 		{
+
 			return true;
 		}
 		else return false;
@@ -301,30 +302,59 @@ public:
 	
 
 	void End() ///////////////////////////////////////////////////////////////////////////this still needs to be fixed!!!!!!!!
-	{
+	{	
+		//std::cout << currentlyFullyChcked.size() << std::endl;
+		//std::cout << currentlyUnlocked.size() << std::endl;
 		finished = true;
 
 		for (Node* n : currentlyFullyChcked)
 		{
-			if(endNode == n->cameFromLowest)
-			shortestEndPath.insert(shortestEndPath.begin(), n);
+			shortestEndPath;
+			/////perhaps point to previous and next node in every node???
 		}
+		bool done = false;
+		Node* it = endNode;
+		while (!done)
+		{
+			if (it == startNode) done = true;
+			shortestEndPath.push_back(it);
+			it = it->cameFromLowest;
+			
+		}
+		//
 
-		bool br = false;
-		for (Node* n : currentlyFullyChcked) 
+		
+
+
+		//bool br = false;
+		/*for (Node* n : currentlyFullyChcked)
 		{
 			for (Node* z : currentlyFullyChcked)
 			{
 				if (n == z->cameFromLowest) 
 				{
-					shortestEndPath.insert(shortestEndPath.begin(), z);
-					if (n == endNode) br = true;
-					if (br) break;
+					//check if it is in it
+					//bool flag = false;
+					for (Node* n : shortestEndPath) 
+					{
+						//if (z == n)flag = true;
+					}
+					shortestEndPath.push_back(z);
+					//if (n == endNode) br = true;
+					//if (br) break;
 				}
-				if (br) break;
-			}
-		}
+				//if (br) break;
+			}*/
+		//}
 
+		
+		for (int i = 0; i < currentlyFullyChcked.size();i++)
+		{
+			int a = currentlyFullyChcked[i]->ID;
+			//currentlyFullyChcked[i]->print();
+			//currentlyFullyChcked[i]->print();
+			//currentlyFullyChcked[i]->cameFromLowest->print();
+		}
 	}
 
 	//Gets lowest Node from currentlyUnlocked
@@ -348,12 +378,16 @@ public:
 		
 		for (Node* n : _node->NodeNeighbours)
 		{
-			if (!n->fullyChecked && n->IsThisLowerThanCurrentCameFromLowest(_node))
+			if (!n->fullyChecked)
 			{
 				currentlyUnlocked.push_back(n);
 				n->Gcost = _node->Gcost + _node->distanceFromNode(n);
 				n->Hcost = n->distanceFromNode(endNode);
 				n->Fcost = n->Gcost + n->Hcost;
+				//if (n->IsThisLowerThanCurrentCameFromLowest(_node)) 
+				
+					n->cameFromLowest = _node;
+				
 			}
 			//if (n->Fcost <= currentLowestFcost) currentLowestFcost = n->Fcost;
 			if (n == endNode) End();
@@ -362,6 +396,7 @@ public:
 		{
 			if (n == _node) {
 				//currentlyUnlocked.erase(n);
+				
 				currentlyFullyChcked.push_back(n);
 				currentlyUnlocked.erase(std::remove(currentlyUnlocked.begin(), currentlyUnlocked.end(), n), currentlyUnlocked.end());
 			}

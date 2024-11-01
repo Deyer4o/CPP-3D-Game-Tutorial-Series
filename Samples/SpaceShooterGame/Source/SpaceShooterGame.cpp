@@ -182,10 +182,8 @@ void SpaceShooterGame::onCreate()
 	//int endc = 0;
 	while (!pathfinder.finished)
 	{
-		//endc++;
 		if (!pathfinder.currentlyLookingAt->fullyChecked) 
 		{
-			//pathfinder.currentlyLookingAt = pathfinder.currentLowestNode;
 			pathfinder.CalculateNeighboursNodeCosts(pathfinder.currentlyLookingAt);
 			pathfinder.CalculateLowestFromUnlocked();
 		}
@@ -193,9 +191,6 @@ void SpaceShooterGame::onCreate()
 		{
 			pathfinder.CalculateLowestFromUnlocked();
 		}
-		
-		//if (endc >= 6) pathfinder.finished = true;
-		
 	}
 
 	////////////////////////////
@@ -220,10 +215,16 @@ void SpaceShooterGame::onCreate()
 	//nodeArray[3].printNeighbours();
 	//pathfinder.NodesArray[4].printNeighbours();
 	//pathfinder.printNeighbours();
+
+	print("----------shortest path:----------");
 	print(pathfinder.shortestEndPath);
+
+
+
+	if(pathfinder.shortestEndPath.size() > 0)
 	for (int i = 0; i < pathfinder.shortestEndPath.size() - 1 ; i++)
 	{
-		int dist = 200;
+		int dist = 50;
 		MakeLine(pathfinder.shortestEndPath[i]->location + Vec3(0, 0, dist), pathfinder.shortestEndPath[i+1]->location + Vec3(0, 0, dist), 5.0f, matGreen);
 	}
 
