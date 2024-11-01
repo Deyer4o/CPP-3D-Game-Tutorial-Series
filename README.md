@@ -1,5 +1,5 @@
-This is a Pathfinder project based on [the CPP3D simple framework](https://github.com/PardCode/CPP-3D-Game-Tutorial-Series)
-used for University project (Breda University of Applied Sciences)
+This is a Pathfinder project based on [the CX3D simple framework](https://github.com/PardCode/CPP-3D-Game-Tutorial-Series)
+used for a university project at Breda University of Applied Sciences
 
 
 
