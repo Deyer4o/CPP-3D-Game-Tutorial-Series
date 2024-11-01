@@ -1,3 +1,8 @@
+This is a Pathfinder project based on [the CPP3D simple framework](https://github.com/PardCode/CPP-3D-Game-Tutorial-Series)
+used for University project (Breda University of Applied Sciences)
+
+
+
 ![CX3D Framework](Media/cx3d_logo.png)
 
 [![CPP17](https://img.shields.io/badge/c++-17-blue)]()
